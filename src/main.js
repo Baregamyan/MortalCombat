@@ -52,8 +52,8 @@ function createElement(tag, className) {
  * @param {Object} playerObj - Players' parameters.
  * @return {HTMLElement}
  */
-function createPlayer(classPlayer, playerObj) {
-  const $player = createElement('div', classPlayer);
+function createPlayer(playerObj) {
+  const $player = createElement('div', `player${playerObj.player}`);
   const $porgressbar = createElement('div', 'progressbar');
   const $character = createElement('div', 'character');
   const $life = createElement('div', 'life');
@@ -75,5 +75,5 @@ function createPlayer(classPlayer, playerObj) {
   return $player;
 }
 
-$arenas.appendChild(createPlayer('player1', player1));
-$arenas.appendChild(createPlayer('player2', player2));
+$arenas.appendChild(createPlayer(player1));
+$arenas.appendChild(createPlayer(player2));
