@@ -1,58 +1,79 @@
-import { generatePlayer } from './mock/player';
-import { createElement, render } from './utils/render';
-
-const PLAYERS_COUNT = 2;
+/**
+ * Default player hp value/
+ */
+const HP_DEFAULT_VALUE = 100;
 
 /**
- * @param {string} playerClass - Name of player element class.
- * @param {string} name - Character name.
- * @param {number} hp - Player health points.
- * @param {string} image - Path to character image.
- * @return {string} - HTML string template.
+ * Container where players appear.
  */
-const getPlayerTemplate = (playerClass, { name, img }) => {
-  const characterName = name.toUpperCase();
+const $arenas = document.querySelector('.arenas');
 
-  return (
-    `<div class="${playerClass}">
-      <div class="progressbar">
-        <div class="life"></div>
-        <div class="name">${characterName}</div>
-      </div>
-      <div class="character">
-        <img src="${img}" />
-      </div>
-    </div>`
-  );
+const player1 = {
+  player: 1,
+  name: 'SCORPION',
+  hp: HP_DEFAULT_VALUE,
+  img: 'http://reactmarathon-api.herokuapp.com/assets/scorpion.gif',
+  attack(name) {
+    // eslint-disable-next-line no-console
+    console.log(`${name} Fight...`);
+  },
 };
 
-const arenasElement = document.querySelector('.arenas');
-
-const players = new Array(PLAYERS_COUNT).fill().map(generatePlayer);
-
-/**
- * Render player.
- * @param {string} playerClass - Name of player element class.
- * @param {Object} player - Player data.
- */
-const createPlayer = (playerClass, player) => {
-  const element = createElement(getPlayerTemplate(playerClass, player));
-  const lifeElement = element.querySelector('.life');
-
-  lifeElement.style.width = `${player.hp}%`;
-
-  render(arenasElement, element);
+const player2 = {
+  player: 2,
+  name: 'LIUKANG',
+  hp: HP_DEFAULT_VALUE,
+  img: 'http://reactmarathon-api.herokuapp.com/assets/liukang.gif',
+  attack(name) {
+    // eslint-disable-next-line no-console
+    console.log(`${name} Fight...`);
+  },
 };
 
 /**
- * Render players in array.
- * @param {Array} array - Array of players.
+ * Create element from tag and class names.
+ * @param {string} tag - Tag name.
+ * @param {string | undefined} className - Needed class for element or nothing.
+ * @return {HTMLElement}
  */
-const createPlayers = (playersArray) => {
-  playersArray.forEach((player, index) => {
-    const playerClass = `player${index + 1}`;
-    createPlayer(playerClass, player);
-  });
-};
+function createElement(tag, className) {
+  const $tag = document.createElement(tag);
 
-createPlayers(players);
+  if (className) {
+    $tag.classList.add(className);
+  }
+
+  return $tag;
+}
+
+/**
+ * Create player HTML element.
+ * @param {string} classPlayer - Player element's class name.
+ * @param {Object} playerObj - Players' parameters.
+ * @return {HTMLElement}
+ */
+function createPlayer(classPlayer, playerObj) {
+  const $player = createElement('div', classPlayer);
+  const $porgressbar = createElement('div', 'progressbar');
+  const $character = createElement('div', 'character');
+  const $life = createElement('div', 'life');
+  const $name = createElement('div', 'name');
+  const $img = createElement('img');
+
+  $life.style.width = `${playerObj.hp}%`;
+  $name.innerText = playerObj.name;
+  $img.src = playerObj.img;
+
+  $porgressbar.appendChild($name);
+  $porgressbar.appendChild($life);
+
+  $character.appendChild($img);
+
+  $player.appendChild($porgressbar);
+  $player.appendChild($character);
+
+  return $player;
+}
+
+$arenas.appendChild(createPlayer('player1', player1));
+$arenas.appendChild(createPlayer('player2', player2));
