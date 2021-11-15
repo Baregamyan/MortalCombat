@@ -57,7 +57,6 @@ function createElement(tag, className) {
 
 /**
  * Create player HTML element.
- * @param {string} classPlayer - Player element's class name.
  * @param {Object} playerObj - Players' parameters.
  * @return {HTMLElement}
  */
