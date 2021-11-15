@@ -262,9 +262,7 @@ body {
     top: 1px;
 }
 
-.loseTitle,
-.winTitle,
-.drawTitle {
+.resultTitle {
     position: absolute;
     top: 25%;
     left: 50%;

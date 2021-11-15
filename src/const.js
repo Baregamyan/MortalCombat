@@ -27,6 +27,11 @@ const WEAPONS = [
 const HP_DEFAULT_VALUE = 100;
 
 /**
+ * Result title class name,
+ */
+const RESULT_CLASS_NAME = 'resultTitle';
+
+/**
  * Possible player's damage range values.
  */
 const DamageValue = {
@@ -34,9 +39,16 @@ const DamageValue = {
   MAX: 20,
 };
 
+const ResultTitle = {
+  DRAW: 'Ha, draw! You are all losers!',
+  WIN: 'wins',
+};
+
 export {
   NAMES,
   WEAPONS,
   HP_DEFAULT_VALUE,
+  RESULT_CLASS_NAME,
   DamageValue,
+  ResultTitle,
 };

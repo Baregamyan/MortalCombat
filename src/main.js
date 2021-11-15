@@ -1,5 +1,10 @@
 import { getRandomInt } from './utils/common';
-import { HP_DEFAULT_VALUE, DamageValue } from './const';
+import {
+  HP_DEFAULT_VALUE,
+  RESULT_CLASS_NAME,
+  DamageValue,
+  ResultTitle,
+} from './const';
 
 /**
  * Container where players appear.
@@ -75,29 +80,6 @@ function createPlayer(playerObj) {
 }
 
 /**
- * Create win title.
- * @param {Object} player - Player's param.
- * @return {HTMLElement}
- */
-function playerWin(player) {
-  const $loseTitle = createElement('div', 'winTitle');
-  $loseTitle.innerText = `${player.name} wins`;
-
-  return $loseTitle;
-}
-
-/**
- * Create draw title.
- * @return {HTMLElement}
- */
-function playersDraw() {
-  const $drawTitle = createElement('div', 'drawTitle');
-  $drawTitle.innerHTML = 'Ha, draw! You are all losers!';
-
-  return $drawTitle;
-}
-
-/**
  * Change player's hp.
  * @param {Object} player - Player's param.
  */
@@ -119,13 +101,19 @@ function changeHp(player) {
  * Render result title.
  * @param {HTMLElement} result - Result title.
  */
-function showResult(result) {
-  if (!result) {
+function showResult(message, playerName) {
+  if (!message) {
     return;
   }
 
+  const $resultTitle = createElement('div', RESULT_CLASS_NAME);
+
+  $resultTitle.innerHTML = playerName
+    ? `${playerName} ${message}`
+    : message;
+
   $randomButton.setAttribute('disabled', true);
-  $arenas.appendChild(result);
+  $arenas.appendChild($resultTitle);
 }
 
 // eslint-disable-next-line consistent-return
@@ -135,15 +123,15 @@ $randomButton.addEventListener('click', (evt) => {
   changeHp(player2);
 
   if ((player1.hp === 0) && (player2.hp === 0)) {
-    return showResult(playersDraw());
+    return showResult(ResultTitle.DRAW);
   }
 
   if (player1.hp === 0) {
-    return showResult(playerWin(player2));
+    return showResult(ResultTitle.WIN, player2.name);
   }
 
   if (player2.hp === 0) {
-    return showResult(playerWin(player1));
+    return showResult(ResultTitle.WIN, player1.name);
   }
 });
 
