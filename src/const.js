@@ -21,16 +21,7 @@ const WEAPONS = [
   'Smart Brain',
 ];
 
-/**
- * Min and max player HP value.
- */
-const Hp = {
-  MIN: 0,
-  MAX: 100,
-};
-
 export {
   NAMES,
   WEAPONS,
-  Hp,
 };
