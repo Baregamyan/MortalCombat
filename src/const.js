@@ -21,7 +21,22 @@ const WEAPONS = [
   'Smart Brain',
 ];
 
+/**
+ * Default player hp value/
+ */
+const HP_DEFAULT_VALUE = 100;
+
+/**
+ * Possible player's damage range values.
+ */
+const DamageValue = {
+  MIN: 1,
+  MAX: 20,
+};
+
 export {
   NAMES,
   WEAPONS,
+  HP_DEFAULT_VALUE,
+  DamageValue,
 };

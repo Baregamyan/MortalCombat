@@ -1,14 +1,5 @@
 import { getRandomInt } from './utils/common';
-
-/**
- * Default player hp value/
- */
-const HP_DEFAULT_VALUE = 100;
-
-const DamageValue = {
-  MIN: 1,
-  MAX: 20,
-};
+import { HP_DEFAULT_VALUE, DamageValue } from './const';
 
 /**
  * Container where players appear.
