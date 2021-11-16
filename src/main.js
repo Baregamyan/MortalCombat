@@ -84,6 +84,25 @@ function renderHP() {
   return this.elHP().style.width = `${this.hp}%`;
 }
 
+/**
+ * Returns restart button element.
+ * @return {HTMLElement}
+ */
+function restartButton() {
+  const $wrap = createElement('div', 'reloadWrap');
+  const $button = createElement('button', 'button');
+  $button.setAttribute('type', 'button');
+  $button.textContent = 'Restart';
+
+  $button.addEventListener('click', (evt) => {
+    evt.preventDefault();
+    window.location.reload();
+  });
+
+  $wrap.appendChild($button);
+  return $wrap;
+}
+
 const player1 = {
   player: 1,
   name: 'SCORPION',
@@ -127,8 +146,9 @@ function showResult(message, playerName) {
     ? `${playerName} ${message}`
     : message;
 
-  $randomButton.setAttribute('disabled', true);
+  $randomButton.remove();
   $arenas.appendChild($resultTitle);
+  $arenas.appendChild(restartButton());
 }
 
 // eslint-disable-next-line consistent-return
