@@ -1,9 +1,10 @@
-import { getRandomInt } from './utils/common';
+import { getRandomElement, getRandomInt } from './utils/common';
 import {
   HP_DEFAULT_VALUE,
   RESULT_CLASS_NAME,
-  DamageValue,
   ResultTitle,
+  Hit,
+  ATTACK,
 } from './const';
 
 /**
@@ -11,7 +12,7 @@ import {
  */
 const $arenas = document.querySelector('.arenas');
 
-const $randomButton = document.querySelector('.button');
+const $formFight = document.querySelector('.control');
 
 /**
  * Create element from tag and class names.
@@ -62,12 +63,12 @@ function createPlayer(playerObj) {
  * @param {Object} player - Player's param.
  */
 function changeHp(value) {
+  this.hp -= value;
+
   if (this.hp <= 0) {
     this.hp = 0;
-    return;
   }
 
-  this.hp -= value;
   this.renderHP();
 }
 
@@ -146,17 +147,52 @@ function showResult(message, playerName) {
     ? `${playerName} ${message}`
     : message;
 
-  $randomButton.remove();
+  $formFight.remove();
   $arenas.appendChild($resultTitle);
   $arenas.appendChild(restartButton());
 }
 
-// eslint-disable-next-line consistent-return
-$randomButton.addEventListener('click', (evt) => {
-  evt.preventDefault();
+function enemyAttack() {
+  const hit = getRandomElement(ATTACK);
+  const defence = getRandomElement(ATTACK);
 
-  player1.changeHp(getRandomInt(DamageValue.MIN, DamageValue.MAX));
-  player2.changeHp(getRandomInt(DamageValue.MIN, DamageValue.MAX));
+  return {
+    value: getRandomInt(0, Hit[hit]),
+    hit,
+    defence,
+  };
+}
+
+// eslint-disable-next-line consistent-return
+$formFight.addEventListener('submit', (evt) => {
+  evt.preventDefault();
+  const enemy = enemyAttack();
+
+  const attack = {};
+  // eslint-disable-next-line no-restricted-syntax
+  for (const item of $formFight) {
+    if (item.checked) {
+      if (item.name === 'hit') {
+        attack.value = getRandomInt(0, Hit[item.value]);
+        attack.hit = item.value;
+      }
+
+      if (item.name === 'defence') {
+        attack.defence = item.value;
+      }
+    }
+  }
+
+  if (attack.hit === enemy.defence) {
+    enemy.value = 0;
+  }
+
+  if (enemy.hit === attack.defence) {
+    attack.value = 0;
+  }
+
+  player1.changeHp(attack.value);
+  player2.changeHp(enemy.value);
 
   if ((player1.hp === 0) && (player2.hp === 0)) {
     return showResult(ResultTitle.DRAW);
@@ -169,6 +205,8 @@ $randomButton.addEventListener('click', (evt) => {
   if (player2.hp === 0) {
     return showResult(ResultTitle.WIN, player1.name);
   }
+
+  $formFight.reset();
 });
 
 $arenas.appendChild(createPlayer(player1));
