@@ -44,6 +44,24 @@ const ResultTitle = {
   WIN: 'wins',
 };
 
+/**
+ * Hit's value.
+ */
+const Hit = {
+  head: 30,
+  body: 25,
+  foot: 20,
+};
+
+/**
+ * Possible place for attack.
+ */
+const ATTACK = [
+  'head',
+  'body',
+  'foot',
+];
+
 export {
   NAMES,
   WEAPONS,
@@ -51,4 +69,6 @@ export {
   RESULT_CLASS_NAME,
   DamageValue,
   ResultTitle,
+  Hit,
+  ATTACK,
 };
