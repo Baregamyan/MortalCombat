@@ -13,28 +13,6 @@ const $arenas = document.querySelector('.arenas');
 
 const $randomButton = document.querySelector('.button');
 
-const player1 = {
-  player: 1,
-  name: 'SCORPION',
-  hp: HP_DEFAULT_VALUE,
-  img: 'http://reactmarathon-api.herokuapp.com/assets/scorpion.gif',
-  attack(name) {
-    // eslint-disable-next-line no-console
-    console.log(`${name} Fight...`);
-  },
-};
-
-const player2 = {
-  player: 2,
-  name: 'LIUKANG',
-  hp: HP_DEFAULT_VALUE,
-  img: 'http://reactmarathon-api.herokuapp.com/assets/liukang.gif',
-  attack(name) {
-    // eslint-disable-next-line no-console
-    console.log(`${name} Fight...`);
-  },
-};
-
 /**
  * Create element from tag and class names.
  * @param {string} tag - Tag name.
@@ -83,19 +61,75 @@ function createPlayer(playerObj) {
  * Change player's hp.
  * @param {Object} player - Player's param.
  */
-function changeHp(player) {
-  const playerClass = `player${player.player}`;
-  const $playerLive = document.querySelector(`.${playerClass} .life`);
-  // eslint-disable-next-line no-param-reassign
-  player.hp -= getRandomInt(DamageValue.MIN, DamageValue.MAX);
-
-  if (player.hp < 0) {
-  // eslint-disable-next-line no-param-reassign
-    player.hp = 0;
+function changeHp(value) {
+  if (this.hp <= 0) {
+    this.hp = 0;
+    return;
   }
 
-  $playerLive.style.width = `${player.hp}%`;
+  this.hp -= value;
+  this.renderHP();
 }
+
+/**
+ * Returns HP line element.
+ * @return {HTMLElement}
+ */
+function elHP() {
+  return document.querySelector(`.player${this.player} .life`);
+}
+
+function renderHP() {
+  // eslint-disable-next-line no-return-assign
+  return this.elHP().style.width = `${this.hp}%`;
+}
+
+/**
+ * Returns restart button element.
+ * @return {HTMLElement}
+ */
+function restartButton() {
+  const $wrap = createElement('div', 'reloadWrap');
+  const $button = createElement('button', 'button');
+  $button.setAttribute('type', 'button');
+  $button.textContent = 'Restart';
+
+  $button.addEventListener('click', (evt) => {
+    evt.preventDefault();
+    window.location.reload();
+  });
+
+  $wrap.appendChild($button);
+  return $wrap;
+}
+
+const player1 = {
+  player: 1,
+  name: 'SCORPION',
+  hp: HP_DEFAULT_VALUE,
+  img: 'http://reactmarathon-api.herokuapp.com/assets/scorpion.gif',
+  attack(name) {
+    // eslint-disable-next-line no-console
+    console.log(`${name} Fight...`);
+  },
+  changeHp,
+  renderHP,
+  elHP,
+};
+
+const player2 = {
+  player: 2,
+  name: 'LIUKANG',
+  hp: HP_DEFAULT_VALUE,
+  img: 'http://reactmarathon-api.herokuapp.com/assets/liukang.gif',
+  attack(name) {
+    // eslint-disable-next-line no-console
+    console.log(`${name} Fight...`);
+  },
+  changeHp,
+  renderHP,
+  elHP,
+};
 
 /**
  * Render result title.
@@ -112,15 +146,17 @@ function showResult(message, playerName) {
     ? `${playerName} ${message}`
     : message;
 
-  $randomButton.setAttribute('disabled', true);
+  $randomButton.remove();
   $arenas.appendChild($resultTitle);
+  $arenas.appendChild(restartButton());
 }
 
 // eslint-disable-next-line consistent-return
 $randomButton.addEventListener('click', (evt) => {
   evt.preventDefault();
-  changeHp(player1);
-  changeHp(player2);
+
+  player1.changeHp(getRandomInt(DamageValue.MIN, DamageValue.MAX));
+  player2.changeHp(getRandomInt(DamageValue.MIN, DamageValue.MAX));
 
   if ((player1.hp === 0) && (player2.hp === 0)) {
     return showResult(ResultTitle.DRAW);
