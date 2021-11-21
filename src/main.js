@@ -9,7 +9,7 @@ import {
 } from './const';
 
 import {
-  udaptLogMessage,
+  adaptLogMessage,
   logTemplate,
   createLog,
 } from './utils/log';
@@ -207,7 +207,7 @@ $formFight.addEventListener('submit', (evt) => {
     enemy.value = 0;
     const messageTemplate = getRandomElement(logTemplate[Action.DEFENCE]);
     showLog(
-      udaptLogMessage[Action.DEFENCE](
+      adaptLogMessage[Action.DEFENCE](
         new Date(),
         messageTemplate,
         player1.name,
@@ -220,7 +220,7 @@ $formFight.addEventListener('submit', (evt) => {
     attack.value = 0;
     const messageTemplate = getRandomElement(logTemplate[Action.DEFENCE]);
     showLog(
-      udaptLogMessage[Action.DEFENCE](
+      adaptLogMessage[Action.DEFENCE](
         new Date(),
         messageTemplate,
         player2.name,
@@ -238,7 +238,7 @@ $formFight.addEventListener('submit', (evt) => {
   if (attack.value !== 0) {
     const messageTemplate = getRandomElement(logTemplate[Action.HIT]);
     showLog(
-      udaptLogMessage[Action.HIT](
+      adaptLogMessage[Action.HIT](
         new Date(),
         messageTemplate,
         player2.name,
@@ -256,7 +256,7 @@ $formFight.addEventListener('submit', (evt) => {
   if (enemy.value !== 0) {
     const messageTemplate = getRandomElement(logTemplate[Action.HIT]);
     showLog(
-      udaptLogMessage[Action.HIT](
+      adaptLogMessage[Action.HIT](
         new Date(),
         messageTemplate,
         player1.name,
@@ -270,7 +270,7 @@ $formFight.addEventListener('submit', (evt) => {
 
   if ((player1.hp === 0) && (player2.hp === 0)) {
     showLog(
-      udaptLogMessage[Action.DRAW](
+      adaptLogMessage[Action.DRAW](
         logTemplate[Action.DRAW],
       ),
     );
@@ -280,7 +280,7 @@ $formFight.addEventListener('submit', (evt) => {
   if (player1.hp === 0) {
     const messageTemplate = getRandomElement(logTemplate[Action.END]);
     showLog(
-      udaptLogMessage[Action.END](
+      adaptLogMessage[Action.END](
         messageTemplate,
         player2.name,
         player1.name,
@@ -292,7 +292,7 @@ $formFight.addEventListener('submit', (evt) => {
   if (player2.hp === 0) {
     const messageTemplate = getRandomElement(logTemplate[Action.END]);
     showLog(
-      udaptLogMessage[Action.END](
+      adaptLogMessage[Action.END](
         messageTemplate,
         player1.name,
         player2.name,
@@ -311,7 +311,7 @@ $arenas.appendChild(createPlayer(player2));
  * Show start log.
  */
 showLog(
-  udaptLogMessage[Action.START](
+  adaptLogMessage[Action.START](
     new Date(),
     logTemplate[Action.START],
     player1.name,

@@ -55,7 +55,7 @@ const humanizeTime = (date) => {
 /**
  * Generate lo
  */
-const udaptLogMessage = {
+const adaptLogMessage = {
   [Action.START]: (time, text, playerName, enemyName) => text
     .replace('[player1]', playerName)
     .replace('[player2]', enemyName)
@@ -97,6 +97,6 @@ const createLog = (text) => {
 export {
   humanizeTime,
   createLog,
-  udaptLogMessage,
+  adaptLogMessage,
   logTemplate,
 };
