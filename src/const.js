@@ -57,6 +57,17 @@ const ATTACK = [
   'foot',
 ];
 
+/**
+ * Action type.
+ */
+const Action = {
+  START: 'start',
+  END: 'end',
+  HIT: 'hit',
+  DEFENCE: 'defence',
+  DRAW: 'draw',
+};
+
 export {
   NAMES,
   WEAPONS,
@@ -65,4 +76,5 @@ export {
   ResultTitle,
   Hit,
   ATTACK,
+  Action,
 };
