@@ -53,18 +53,42 @@ const humanizeTime = (date) => {
 };
 
 /**
- * Generate lo
+ * FIXME: Minimize repeated JSDoc params?
+ * Adapt log message.
  */
 const adaptLogMessage = {
+
+  /**
+   * @param {Object} time - Time of action.
+   * @param {string} text - Log message template.
+   * @param {string} playerName - Player's character name.
+   * @param {string} enemyName - Enemy's character name.
+   * @return {string}
+   */
   [Action.START]: (time, text, playerName, enemyName) => text
     .replace('[player1]', playerName)
     .replace('[player2]', enemyName)
     .replace('[time]', humanizeTime(time)),
 
+  /**
+   * @param {string} text - Log message template.
+   * @param {string} loserName - Lose player's character name.
+   * @return {string}
+   */
   [Action.END]: (text, winnerName, loserName) => text
     .replace('[playerWins]', winnerName)
     .replace('[playerLose]', loserName),
 
+  /**
+   * @param {Object} time - Time of action.
+   * @param {string} text - Log message template.
+   * @param {string} attacker - Attacker player's character name.
+   * @param {string} defencer - Defencer player's character name.
+   * @param {number} damage - Defencer damage value.
+   * @param {number} currentHp - Current defencer hp value after get damage.
+   * @param {number} maxHp - Maximum player hp.
+   * @return {string}
+   */
   [Action.HIT]: (time, text, attacker, defencer, damage, currentHp, maxHp) => {
     const message = text
       .replace('[playerKick]', attacker)
@@ -72,6 +96,13 @@ const adaptLogMessage = {
     return `${humanizeTime(time)} ${message}  -${damage} [${currentHp}/${maxHp}]`;
   },
 
+  /**
+   * @param {Object} time - Time of action.
+   * @param {string} text - Log message template.
+   * @param {string} attacker - Attacker player's character name.
+   * @param {string} defencer - Defencer player's character name.
+   * @return {string}
+   */
   [Action.DEFENCE]: (time, text, attacker, defencer) => {
     const message = text
       .replace('[playerKick]', attacker)
@@ -79,6 +110,10 @@ const adaptLogMessage = {
     return `${humanizeTime(time)} ${message}`;
   },
 
+  /**
+   * @param {string} text - Log message template.
+   * @return {string}
+   */
   [Action.DRAW]: (text) => text,
 };
 
