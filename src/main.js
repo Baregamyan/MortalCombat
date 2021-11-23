@@ -5,7 +5,16 @@ import {
   ResultTitle,
   Hit,
   ATTACK,
+  Action,
 } from './const';
+
+import {
+  adaptLogMessage,
+  logTemplate,
+  createLog,
+} from './utils/log';
+
+import { render, RenderPosition } from './utils/render';
 
 /**
  * Container where players appear.
@@ -13,6 +22,8 @@ import {
 const $arenas = document.querySelector('.arenas');
 
 const $formFight = document.querySelector('.control');
+
+const $chat = document.querySelector('.chat');
 
 /**
  * Create element from tag and class names.
@@ -163,6 +174,15 @@ function enemyAttack() {
   };
 }
 
+/**
+ * Show log in the chat.
+ * @param {string} message - Log message.
+ */
+const showLog = (message) => {
+  const $log = createLog(message);
+  render($chat, $log, RenderPosition.AFTERBEGIN);
+};
+
 // eslint-disable-next-line consistent-return
 $formFight.addEventListener('submit', (evt) => {
   evt.preventDefault();
@@ -172,12 +192,12 @@ $formFight.addEventListener('submit', (evt) => {
   // eslint-disable-next-line no-restricted-syntax
   for (const item of $formFight) {
     if (item.checked) {
-      if (item.name === 'hit') {
+      if (item.name === Action.HIT) {
         attack.value = getRandomInt(0, Hit[item.value]);
         attack.hit = item.value;
       }
 
-      if (item.name === 'defence') {
+      if (item.name === Action.DEFENCE) {
         attack.defence = item.value;
       }
     }
@@ -185,24 +205,99 @@ $formFight.addEventListener('submit', (evt) => {
 
   if (attack.hit === enemy.defence) {
     enemy.value = 0;
+    const messageTemplate = getRandomElement(logTemplate[Action.DEFENCE]);
+    showLog(
+      adaptLogMessage[Action.DEFENCE](
+        new Date(),
+        messageTemplate,
+        player1.name,
+        player2.name,
+      ),
+    );
   }
 
   if (enemy.hit === attack.defence) {
     attack.value = 0;
+    const messageTemplate = getRandomElement(logTemplate[Action.DEFENCE]);
+    showLog(
+      adaptLogMessage[Action.DEFENCE](
+        new Date(),
+        messageTemplate,
+        player2.name,
+        player1.name,
+      ),
+    );
   }
 
   player1.changeHp(attack.value);
   player2.changeHp(enemy.value);
 
+  /**
+   * If the player gets some damage.
+   */
+  if (attack.value !== 0) {
+    const messageTemplate = getRandomElement(logTemplate[Action.HIT]);
+    showLog(
+      adaptLogMessage[Action.HIT](
+        new Date(),
+        messageTemplate,
+        player2.name,
+        player1.name,
+        attack.value,
+        player1.hp,
+        HP_DEFAULT_VALUE,
+      ),
+    );
+  }
+
+  /**
+   * If an enemy gets some damage.
+   */
+  if (enemy.value !== 0) {
+    const messageTemplate = getRandomElement(logTemplate[Action.HIT]);
+    showLog(
+      adaptLogMessage[Action.HIT](
+        new Date(),
+        messageTemplate,
+        player1.name,
+        player2.name,
+        enemy.value,
+        player2.hp,
+        HP_DEFAULT_VALUE,
+      ),
+    );
+  }
+
   if ((player1.hp === 0) && (player2.hp === 0)) {
+    showLog(
+      adaptLogMessage[Action.DRAW](
+        logTemplate[Action.DRAW],
+      ),
+    );
     return showResult(ResultTitle.DRAW);
   }
 
   if (player1.hp === 0) {
+    const messageTemplate = getRandomElement(logTemplate[Action.END]);
+    showLog(
+      adaptLogMessage[Action.END](
+        messageTemplate,
+        player2.name,
+        player1.name,
+      ),
+    );
     return showResult(ResultTitle.WIN, player2.name);
   }
 
   if (player2.hp === 0) {
+    const messageTemplate = getRandomElement(logTemplate[Action.END]);
+    showLog(
+      adaptLogMessage[Action.END](
+        messageTemplate,
+        player1.name,
+        player2.name,
+      ),
+    );
     return showResult(ResultTitle.WIN, player1.name);
   }
 
@@ -211,3 +306,15 @@ $formFight.addEventListener('submit', (evt) => {
 
 $arenas.appendChild(createPlayer(player1));
 $arenas.appendChild(createPlayer(player2));
+
+/**
+ * Show start log.
+ */
+showLog(
+  adaptLogMessage[Action.START](
+    new Date(),
+    logTemplate[Action.START],
+    player1.name,
+    player2.name,
+  ),
+);
