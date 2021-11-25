@@ -65,7 +65,14 @@ const adaptLogMessage = {
    * @param {string} enemyName - Enemy's character name.
    * @return {string}
    */
-  [Action.START]: (time, text, playerName, enemyName) => text
+  [Action.START]: (
+    {
+      time,
+      text,
+      playerName,
+      enemyName,
+    },
+  ) => text
     .replace('[player1]', playerName)
     .replace('[player2]', enemyName)
     .replace('[time]', humanizeTime(time)),
@@ -75,7 +82,13 @@ const adaptLogMessage = {
    * @param {string} loserName - Lose player's character name.
    * @return {string}
    */
-  [Action.END]: (text, winnerName, loserName) => text
+  [Action.END]: (
+    {
+      text,
+      winnerName,
+      loserName,
+    },
+  ) => text
     .replace('[playerWins]', winnerName)
     .replace('[playerLose]', loserName),
 
@@ -89,10 +102,20 @@ const adaptLogMessage = {
    * @param {number} maxHp - Maximum player hp.
    * @return {string}
    */
-  [Action.HIT]: (time, text, attacker, defencer, damage, currentHp, maxHp) => {
+  [Action.HIT]: (
+    {
+      time,
+      text,
+      attackerName,
+      defenderName,
+      damage,
+      currentHp,
+      maxHp,
+    },
+  ) => {
     const message = text
-      .replace('[playerKick]', attacker)
-      .replace('[playerDefence]', defencer);
+      .replace('[playerKick]', attackerName)
+      .replace('[playerDefence]', defenderName);
     return `${humanizeTime(time)} ${message}  -${damage} [${currentHp}/${maxHp}]`;
   },
 
@@ -103,10 +126,17 @@ const adaptLogMessage = {
    * @param {string} defencer - Defencer player's character name.
    * @return {string}
    */
-  [Action.DEFENCE]: (time, text, attacker, defencer) => {
+  [Action.DEFENCE]: (
+    {
+      time,
+      text,
+      attackerName,
+      defenderName,
+    },
+  ) => {
     const message = text
-      .replace('[playerKick]', attacker)
-      .replace('[playerDefence]', defencer);
+      .replace('[playerKick]', attackerName)
+      .replace('[playerDefence]', defenderName);
     return `${humanizeTime(time)} ${message}`;
   },
 
@@ -114,7 +144,11 @@ const adaptLogMessage = {
    * @param {string} text - Log message template.
    * @return {string}
    */
-  [Action.DRAW]: (text) => text,
+  [Action.DRAW]: (
+    {
+      text,
+    },
+  ) => text,
 };
 
 /**
