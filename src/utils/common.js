@@ -16,6 +16,9 @@ const getRandomInt = (a = 1, b = 0) => {
  * @return - Random element;
  */
 const getRandomElement = (array) => {
+  if (!Array.isArray(array)) {
+    return array;
+  }
   if (array.length === 0) {
     throw new Error('Array is empty.');
   }
