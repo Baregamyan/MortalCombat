@@ -7,15 +7,19 @@ const RenderPosition = {
 };
 
 /**
- * Transfrom string template to DOM element.
- * @param {string} template - HTML template needed to be a DOM element.
+ * Create element from tag and class names.
+ * @param {string} tag - Tag name.
+ * @param {string | undefined} className - Needed class for element or nothing.
  * @return {HTMLElement}
  */
-const createElement = (template) => {
-  const newElement = document.createElement('div');
-  newElement.innerHTML = template;
+const createElement = (tag, className) => {
+  const $tag = document.createElement(tag);
 
-  return newElement.firstChild;
+  if (className) {
+    $tag.classList.add(className);
+  }
+
+  return $tag;
 };
 
 /**
