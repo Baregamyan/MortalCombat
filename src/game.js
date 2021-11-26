@@ -11,6 +11,9 @@ import { createRestartButton } from './utils/game';
 import { getRandomElement } from './utils/common';
 import { createEnemyAction, createPlayerAction } from './utils/player';
 
+/**
+ * Game.
+ */
 export default class Game {
   /**
    * @param {HTMLElement} $arena - Battle container.
@@ -31,7 +34,7 @@ export default class Game {
 
   /**
    * Start the game.
-   * @param {Array} players - Players.
+   * @param {Array} data - Players.
    */
   init(data) {
     this.data = data;
@@ -48,6 +51,10 @@ export default class Game {
     this.renderPlayers();
   }
 
+  /**
+   * On form fight submit handler. Runs every after 'Fight' button pressed.
+   * @param {Object} evt - Event.
+   */
   handleFormFightSubmit(evt) {
     evt.preventDefault();
     this.player.action = createPlayerAction(Object.values(evt.target));
@@ -56,10 +63,13 @@ export default class Game {
     this.fight();
   }
 
+  /**
+   * Fight event. Players attack each other and try to defence from hit.
+   */
   fight() {
     this.players.forEach((player) => {
       this.attacker = player;
-      // FIXME: Rewrite according O(log n) optimization.
+      // FIXME: Rewrite according O(log n) optimization(?).
       this.defender = this.players
         .filter((defender) => defender !== this.attacker)
         .shift();
@@ -70,6 +80,9 @@ export default class Game {
     this.checkGameStatus();
   }
 
+  /**
+   * Attacking player hits (or miss) defender.
+   */
   hit() {
     if (this.attacker.action.hit === this.defender.action.defence) {
       this.miss();
@@ -81,6 +94,10 @@ export default class Game {
     this.showLog(Action.HIT);
   }
 
+  /**
+   * Check players health after any hit in order to check is the game has to be ended.
+   * @return
+   */
   checkGameStatus() {
     if (this.player.hp === 0 && this.enemy.hp === 0) {
       this.draw();
@@ -92,17 +109,26 @@ export default class Game {
     }
   }
 
+  /**
+   * Draw event. If after fight event (players hit each other) players health equal to zero.
+   */
   draw() {
     this.showLog(Action.DRAW);
     this.showResult(ResultTitle.DRAW);
     this.finish();
   }
 
+  /**
+   * Finish the game.
+   */
   finish() {
     this.$arena.appendChild(createRestartButton());
     this.$formFight.remove();
   }
 
+  /**
+   * Win event. If some of players has health equal to zero finish the game.
+   */
   win() {
     // FIXME: Rewrite according DRY.
     if (this.player.hp === 0) {
@@ -120,17 +146,24 @@ export default class Game {
     this.finish();
   }
 
+  /**
+   * Miss event. Player missed when attacking player hits to defended defender's part of body.
+   */
   miss() {
     this.attacker.miss();
     this.showLog(Action.DEFENCE);
   }
 
+  /**
+   * Render players in a game area. Runs when the game just started.
+   */
   renderPlayers() {
     this.players.forEach((player) => this.$arena.appendChild(player.element));
     this.showLog(Action.START);
   }
 
   /**
+   * Show result message of the game ending.
    * @param {string} message - Result text.
    * @param {string | undefined} playerName - Winner player name if we have a winner.
    */
@@ -146,6 +179,11 @@ export default class Game {
     this.$arena.appendChild(createRestartButton());
   }
 
+  /**
+   * Generate and adapt log message of any event according the event type.
+   * @param {string} type - Event type.
+   * @return {string}
+   */
   generateLogMessage(type) {
     const log = {};
     log.text = getRandomElement(logTemplate[type]);

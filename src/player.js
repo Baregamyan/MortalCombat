@@ -1,6 +1,15 @@
 import { createElement } from './utils/render';
 
+/**
+ * Player.
+ */
 export default class Player {
+  /**
+   * @param {number} player - Unique number of player.
+   * @param {string} name - Character name.
+   * @param {number} hp - Current player's health.
+   * @param {string} img - Path to gif image of character.
+   */
   constructor(
     {
       player, name, hp, img,
@@ -13,6 +22,9 @@ export default class Player {
     this.action = {};
   }
 
+  /**
+   * Change player's health.
+   */
   changeHp() {
     this.hp -= this.action.damage;
 
@@ -23,18 +35,32 @@ export default class Player {
     this.renderHP();
   }
 
+  /**
+   * Render health line according hp value.
+   */
   renderHP() {
     this.elHP.style.width = `${this.hp}%`;
   }
 
+  /**
+   * Player miss.
+   */
   miss() {
     this.action.value = 0;
   }
 
+  /**
+   * Get health line element.
+   * @readonly
+   */
   get elHP() {
     return document.querySelector(`.player${this.player} .life`);
   }
 
+  /**
+   * Get player element.
+   * @readonly
+   */
   get element() {
     const $player = createElement('div', `player${this.player}`);
     const $porgressbar = createElement('div', 'progressbar');

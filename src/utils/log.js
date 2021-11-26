@@ -1,5 +1,8 @@
 import { Action } from '../const';
 
+/**
+ * Log messages template.
+ */
 const logTemplate = {
   [Action.START]: 'Часы показывали [time], когда [player1] и [player2] бросили вызов друг другу.',
   [Action.END]: [
