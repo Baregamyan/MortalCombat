@@ -37,8 +37,7 @@ export default class Game {
    * @param {Array} data - Players.
    */
   init(data) {
-    this.data = data;
-    this.players = this.data.map((player) => new Player(player));
+    this.players = data.map((player) => new Player(player));
     this.logs = [];
     this.winner = null;
     this.loser = null;
