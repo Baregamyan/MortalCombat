@@ -1,14 +1,13 @@
 import Player from './player';
+import Log from './log';
 import {
   Action,
   HP_DEFAULT_VALUE,
   ResultTitle,
   RESULT_CLASS_NAME,
 } from './const';
-import { createElement, render, RenderPosition } from './utils/render';
-import { adaptLogMessage, createLog, logTemplate } from './utils/log';
+import { createElement } from './utils/render';
 import { createRestartButton } from './utils/game';
-import { getRandomElement } from './utils/common';
 import { createEnemyAction, createPlayerAction } from './utils/player';
 
 /**
@@ -153,6 +152,14 @@ export default class Game {
     this.showLog(Action.DEFENCE);
   }
 
+  createLog(type) {
+    return new Log(
+      this.$chat,
+      new Date(),
+      type,
+    );
+  }
+
   /**
    * Render players in a game area. Runs when the game just started.
    */
@@ -179,50 +186,42 @@ export default class Game {
   }
 
   /**
-   * Generate and adapt log message of any event according the event type.
-   * @param {string} type - Event type.
-   * @return {string}
+   * Show log message in the chat.
+   * @param {string} type - Log message.
    */
-  generateLogMessage(type) {
-    const log = {};
-    log.text = getRandomElement(logTemplate[type]);
-    log.time = new Date();
+  showLog(type) {
+    const log = new Log(
+      this.$chat,
+      new Date(),
+      type,
+    );
 
     switch (type) {
       case Action.START:
-        log.playerName = this.player.name;
-        log.enemyName = this.enemy.name;
+        log.start(this.player.name, this.enemy.name);
         break;
       case Action.END:
-        log.winnerName = this.winner.name;
-        log.loserName = this.loser.name;
+        log.end(this.winner.name, this.loser.name);
         break;
       case Action.DEFENCE:
-        log.attackerName = this.attacker.name;
-        log.defenderName = this.defender.name;
+        log.defence(this.attacker.name, this.defender.name);
         break;
       case Action.HIT:
-        log.attackerName = this.attacker.name;
-        log.defenderName = this.defender.name;
-        log.currentHp = this.defender.hp;
-        log.damage = this.attacker.action.value;
-        log.maxHp = HP_DEFAULT_VALUE;
+        log.hit(
+          this.attacker.name,
+          this.defender.name,
+          this.defender.hp,
+          this.attacker.action.value,
+          HP_DEFAULT_VALUE,
+        );
         break;
       case Action.DRAW:
+        log.draw();
         break;
       default:
         throw new Error(`Unknow action type ${type}`);
     }
     this.logs.push(log);
-    return adaptLogMessage[type](log);
-  }
-
-  /**
-   * Show log message in the chat.
-   * @param {string} type - Log message.
-   */
-  showLog(type) {
-    const $log = createLog(this.generateLogMessage(type));
-    render(this.$chat, $log, RenderPosition.AFTERBEGIN);
+    log.show();
   }
 }

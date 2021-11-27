@@ -49,126 +49,21 @@ const logTemplate = {
  * @returns {string}
  */
 const humanizeTime = (date) => {
-  const hour = date.getHours();
-  const minutes = date.getMinutes();
+  let hour = date.getHours();
+  let minutes = date.getMinutes();
+
+  if (minutes.length === 0) {
+    minutes = `0${minutes}`;
+  }
+
+  if (hour.length === 0) {
+    hour = `0${hour}`;
+  }
 
   return `${hour}:${minutes}`;
 };
 
-/**
- * FIXME: Minimize repeated JSDoc params?
- * Adapt log message.
- */
-const adaptLogMessage = {
-
-  /**
-   * @param {Object} time - Time of action.
-   * @param {string} text - Log message template.
-   * @param {string} playerName - Player's character name.
-   * @param {string} enemyName - Enemy's character name.
-   * @return {string}
-   */
-  [Action.START]: (
-    {
-      time,
-      text,
-      playerName,
-      enemyName,
-    },
-  ) => text
-    .replace('[player1]', playerName)
-    .replace('[player2]', enemyName)
-    .replace('[time]', humanizeTime(time)),
-
-  /**
-   * @param {string} text - Log message template.
-   * @param {string} loserName - Lose player's character name.
-   * @return {string}
-   */
-  [Action.END]: (
-    {
-      text,
-      winnerName,
-      loserName,
-    },
-  ) => text
-    .replace('[playerWins]', winnerName)
-    .replace('[playerLose]', loserName),
-
-  /**
-   * @param {Object} time - Time of action.
-   * @param {string} text - Log message template.
-   * @param {string} attacker - Attacker player's character name.
-   * @param {string} defencer - Defencer player's character name.
-   * @param {number} damage - Defencer damage value.
-   * @param {number} currentHp - Current defencer hp value after get damage.
-   * @param {number} maxHp - Maximum player hp.
-   * @return {string}
-   */
-  [Action.HIT]: (
-    {
-      time,
-      text,
-      attackerName,
-      defenderName,
-      damage,
-      currentHp,
-      maxHp,
-    },
-  ) => {
-    const message = text
-      .replace('[playerKick]', attackerName)
-      .replace('[playerDefence]', defenderName);
-    return `${humanizeTime(time)} ${message}  -${damage} [${currentHp}/${maxHp}]`;
-  },
-
-  /**
-   * @param {Object} time - Time of action.
-   * @param {string} text - Log message template.
-   * @param {string} attacker - Attacker player's character name.
-   * @param {string} defencer - Defencer player's character name.
-   * @return {string}
-   */
-  [Action.DEFENCE]: (
-    {
-      time,
-      text,
-      attackerName,
-      defenderName,
-    },
-  ) => {
-    const message = text
-      .replace('[playerKick]', attackerName)
-      .replace('[playerDefence]', defenderName);
-    return `${humanizeTime(time)} ${message}`;
-  },
-
-  /**
-   * @param {string} text - Log message template.
-   * @return {string}
-   */
-  [Action.DRAW]: (
-    {
-      text,
-    },
-  ) => text,
-};
-
-/**
- * Create log HTML element.
- * @param {string} text - Log's message.
- * @returns {HTMLElement}
- */
-const createLog = (text) => {
-  const element = document.createElement('p');
-  element.textContent = text;
-
-  return element;
-};
-
 export {
   humanizeTime,
-  createLog,
-  adaptLogMessage,
   logTemplate,
 };
