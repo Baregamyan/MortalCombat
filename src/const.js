@@ -6,7 +6,7 @@ const NAMES = [
   'Kitana',
   'Liukang',
   'Sonya',
-  'subzero',
+  'Subzero',
 ];
 
 /**
@@ -51,11 +51,7 @@ const Hit = {
 /**
  * Possible place for attack.
  */
-const ATTACK = [
-  'head',
-  'body',
-  'foot',
-];
+const ATTACK = Object.keys(Hit);
 
 /**
  * Action type.

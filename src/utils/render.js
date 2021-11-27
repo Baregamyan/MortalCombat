@@ -24,7 +24,6 @@ const createElement = (tag, className) => {
 
 /**
  * Render child element in to container.
- * Use append and prepend insteed of appendChild because more flexability in render position.
  * @param {HTMLElement} container
  * @param {HTMLElement} child
  * @param {string} place

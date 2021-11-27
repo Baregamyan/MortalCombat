@@ -1,70 +1,50 @@
-import { createElement } from './render';
+import { Action, Hit, ATTACK } from '../const';
 
+import {
+  getRandomElement,
+} from './common';
+
+// FIXME: Merge functions to 'createAction' function ?
 /**
- * Create player HTML element.
- * @param {Object} playerObj - Players' parameters.
- * @return {HTMLElement}
+ * Create player action param.
+ * @param {Array} controls - Player's controls.
+ * @return {Object} - Player's action.
  */
-const createPlayer = (playerObj) => {
-  const {
-    player,
-    name,
-    hp,
-    img,
-  } = playerObj;
+const createPlayerAction = (controls) => {
+  const action = {};
 
-  const $player = createElement('div', `player${player}`);
-  const $porgressbar = createElement('div', 'progressbar');
-  const $character = createElement('div', 'character');
-  const $life = createElement('div', 'life');
-  const $name = createElement('div', 'name');
-  const $img = createElement('img');
+  controls.forEach((control) => {
+    if (control.checked) {
+      if (control.name === Action.HIT) {
+        action.hit = control.value;
+        action.value = Hit[control.value];
+      }
 
-  $life.style.width = `${hp}%`;
-  $name.innerText = name;
-  $img.src = img;
+      if (control.name === Action.DEFENCE) {
+        action.defence = control.value;
+      }
+    }
+  });
 
-  $porgressbar.appendChild($name);
-  $porgressbar.appendChild($life);
-
-  $character.appendChild($img);
-
-  $player.appendChild($porgressbar);
-  $player.appendChild($character);
-
-  return $player;
+  return action;
 };
 
 /**
- * Change player's hp.
- * @param {Object} player - Player's param.
+ * Create enemy player action param.
+ * @return {Object}
  */
-function changeHp(value) {
-  this.hp -= value;
+const createEnemyAction = () => {
+  const hit = getRandomElement(ATTACK);
+  const defence = getRandomElement(ATTACK);
 
-  if (this.hp <= 0) {
-    this.hp = 0;
-  }
-
-  this.renderHP();
-}
-
-/**
- * Returns HP line element.
- * @return {HTMLElement}
- */
-function elHP() {
-  return document.querySelector(`.player${this.player} .life`);
-}
-
-function renderHP() {
-  // eslint-disable-next-line no-return-assign
-  return this.elHP().style.width = `${this.hp}%`;
-}
+  return {
+    value: Hit[hit],
+    hit,
+    defence,
+  };
+};
 
 export {
-  createPlayer,
-  changeHp,
-  elHP,
-  renderHP,
+  createPlayerAction,
+  createEnemyAction,
 };
