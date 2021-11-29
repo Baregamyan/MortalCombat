@@ -124,10 +124,13 @@ export default class ChooseScreen {
       document.querySelectorAll('.character').forEach((character) => {
         character.removeEventListener('click', this.handleCharacterClick);
         character.removeEventListener('mouseover', this.handleCharacterMouseover);
+        character.removeEventListener('mouseout', this.handleCharacterMouseout);
       });
 
-      this.api.getRandomCharacter()
-        .then((enemy) => this.enemyChoose(enemy));
+      window.setTimeout(() => {
+        this.api.getRandomCharacter()
+          .then((enemy) => this.enemyChoose(enemy));
+      }, 500);
     }
   }
 
