@@ -114,7 +114,7 @@ export default class ChooseScreen {
   startGame() {
     localStorage.setItem('player1', JSON.stringify(this.player));
     localStorage.setItem('player2', JSON.stringify(this.enemy));
-    window.location.pathname = 'arenas.html';
+    window.location.pathname = '/arenas.html';
   }
 
   handleCharacterClick(evt) {
@@ -132,8 +132,8 @@ export default class ChooseScreen {
   }
 
   handleCharacterMouseout(evt) {
-    if (evt.target === 'DIV') {
-      this.evt.target.removeEventListener('mouseout', this.handleCharacterMouseout);
+    if (evt.target.tagName === 'DIV') {
+      evt.target.removeEventListener('mouseout', this.handleCharacterMouseout);
       this.$showedCharacter.remove();
       this.$showedCharacter = null;
     }
