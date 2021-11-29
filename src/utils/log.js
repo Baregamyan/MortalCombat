@@ -52,11 +52,11 @@ const humanizeTime = (date) => {
   let hour = date.getHours();
   let minutes = date.getMinutes();
 
-  if (minutes.length === 0) {
+  if (minutes.toString().length === 1) {
     minutes = `0${minutes}`;
   }
 
-  if (hour.length === 0) {
+  if (hour.toString().length === 1) {
     hour = `0${hour}`;
   }
 
