@@ -4,31 +4,53 @@ const Method = {
 };
 
 export default class Api {
-  constructor(playersUrl, randomUrl, fightUrl) {
-    this.playersUrl = playersUrl;
-    this.randomUrl = randomUrl;
-    this.fightUrl = fightUrl;
+  constructor(
+    {
+      CHARACTERS,
+      RANDOM_CHARACTER,
+      FIGHT,
+    },
+  ) {
+    this.charactersUrl = CHARACTERS;
+    this.randomCharacterUrl = RANDOM_CHARACTER;
+    this.fightUrl = FIGHT;
   }
 
   getCharacters() {
-    return this.load(this.playersUrl, Method.GET)
+    const options = {
+      method: Method.GET,
+    };
+    return this.load(this.charactersUrl, options)
       .then(Api.toJSON);
   }
 
   getRandomCharacter() {
-    return this.load(this.randomUrl, Method.GET)
+    const options = {
+      method: Method.GET,
+    };
+    return this.load(this.randomCharacterUrl, options)
       .then(Api.toJSON);
   }
 
-  postFight() {
-    return this.load(this.fightUrl, Method.POST);
+  postHit(action) {
+    const { hit, defence } = action;
+    const options = {
+      method: Method.POST,
+      body: JSON.stringify({
+        hit,
+        defence,
+      }),
+    };
+
+    return this.load(this.fightUrl, options)
+      .then(Api.toJSON);
   }
 
   // eslint-disable-next-line class-methods-use-this
-  load(url, methodType) {
+  load(url, options) {
     return fetch(
       url,
-      { method: methodType },
+      options,
     )
       .then(Api.checkStatus)
       .catch(Api.checkError);

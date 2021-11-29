@@ -8,7 +8,7 @@ import {
 } from './const';
 import { createElement } from './utils/render';
 import { createRestartButton } from './utils/game';
-import { createEnemyAction, createPlayerAction } from './utils/player';
+import { createPlayerAction } from './utils/player';
 
 /**
  * Game.
@@ -25,10 +25,12 @@ export default class Game {
       $formFight,
       $chat,
     },
+    api,
   ) {
     this.$arena = $arena;
     this.$formFight = $formFight;
     this.$chat = $chat;
+    this.api = api;
   }
 
   /**
@@ -61,10 +63,21 @@ export default class Game {
    */
   handleFormFightSubmit(evt) {
     evt.preventDefault();
-    this.player.action = createPlayerAction(Object.values(evt.target));
-    this.enemy.action = createEnemyAction();
 
-    this.fight();
+    this.player.action = createPlayerAction(Object.values(evt.target));
+
+    this.api.postHit(this.player.action)
+      .then((enemyAction) => this.createEnemyAction(enemyAction))
+      .then(() => this.fight());
+  }
+
+  /**
+   * Create enemy action params.
+   * @param {Object} action - Fight params.
+   */
+  createEnemyAction(action) {
+    const { player2 } = action;
+    this.enemy.action = player2;
   }
 
   /**
@@ -126,8 +139,16 @@ export default class Game {
    * Finish the game.
    */
   finish() {
-    this.$arena.appendChild(createRestartButton());
+    const $restartButton = createRestartButton();
+    window.localStorage.clear();
     this.$formFight.remove();
+
+    $restartButton.addEventListener('click', (evt) => {
+      evt.preventDefault();
+      window.location.pathname = '/index.html';
+    });
+
+    this.$arena.appendChild($restartButton);
   }
 
   /**

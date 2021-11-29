@@ -1,5 +1,6 @@
 import Game from './game';
-
+import Api from './api';
+import { Url } from './const';
 /**
  * Game elements.
  */
@@ -17,10 +18,12 @@ const players = [
   JSON.parse(localStorage.getItem('player2')),
 ];
 
+const api = new Api(Url);
+
 /**
  * Create the game.
  */
-const game = new Game(element);
+const game = new Game(element, api);
 game.init(players);
 
 /**
