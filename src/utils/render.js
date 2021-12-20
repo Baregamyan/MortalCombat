@@ -16,7 +16,11 @@ const createElement = (tag, className) => {
   const $tag = document.createElement(tag);
 
   if (className) {
-    $tag.classList.add(className);
+    if (Array.isArray(className)) {
+      className.forEach((name) => $tag.classList.add(name));
+    } else {
+      $tag.classList.add(className);
+    }
   }
 
   return $tag;

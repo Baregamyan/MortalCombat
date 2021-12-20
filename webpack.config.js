@@ -4,7 +4,8 @@ const path = require('path');
 
 module.exports = {
   entry: {
-    main: path.resolve(__dirname, 'src/main.js'),
+    arenas: path.resolve(__dirname, 'src/arenas.js'),
+    screen: path.resolve(__dirname, 'src/screen.js'),
   },
   output: {
     path: path.resolve(__dirname, 'dist/'),
@@ -15,11 +16,19 @@ module.exports = {
   plugins: [
     new HtmlWebpackPlugin({
       template: 'src/index.html',
+      filename: 'index.html',
+      chunks: ['screen'],
+    }),
+    new HtmlWebpackPlugin({
+      template: 'src/arenas.html',
+      filename: 'arenas.html',
+      chunks: ['arenas'],
     }),
     new CopyWebpackPlugin({
       patterns: [
         { from: path.resolve(__dirname, 'src/assets'), to: path.resolve(__dirname, 'dist/assets') },
-        { from: path.resolve(__dirname, 'src/style.css'), to: path.resolve(__dirname, 'dist/') },
+        { from: path.resolve(__dirname, 'src/arenas.css'), to: path.resolve(__dirname, 'dist/') },
+        { from: path.resolve(__dirname, 'src/screen.css'), to: path.resolve(__dirname, 'dist/') },
       ]
     })
   ],

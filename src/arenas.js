@@ -1,11 +1,6 @@
-import createPlayers from './mock/create-players';
 import Game from './game';
-
-/**
- * Default players count.
- */
-const PLAYERS_COUNT = 2;
-
+import Api from './api';
+import { Url } from './const';
 /**
  * Game elements.
  */
@@ -18,14 +13,20 @@ const element = {
 /**
  * Players data.
  */
-const players = createPlayers(PLAYERS_COUNT);
+const players = [
+  JSON.parse(localStorage.getItem('player1')),
+  JSON.parse(localStorage.getItem('player2')),
+];
+
+const api = new Api(Url);
 
 /**
  * Create the game.
  */
-const game = new Game(element);
+const game = new Game(element, api);
+game.init(players);
 
 /**
  * Start the game.
  */
-game.init(players);
+// game.init(players);

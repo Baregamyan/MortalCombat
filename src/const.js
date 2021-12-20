@@ -64,6 +64,12 @@ const Action = {
   DRAW: 'draw',
 };
 
+const Url = {
+  CHARACTERS: 'https://reactmarathon-api.herokuapp.com/api/mk/players',
+  RANDOM_CHARACTER: 'https://reactmarathon-api.herokuapp.com/api/mk/player/choose',
+  FIGHT: 'http://reactmarathon-api.herokuapp.com/api/mk/player/fight',
+};
+
 export {
   NAMES,
   WEAPONS,
@@ -73,4 +79,5 @@ export {
   Hit,
   ATTACK,
   Action,
+  Url,
 };
